@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+//首页
 public class IndexController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IndexController.class);
 
