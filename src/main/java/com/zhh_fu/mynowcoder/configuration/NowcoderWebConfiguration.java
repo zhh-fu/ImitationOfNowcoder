@@ -1,5 +1,6 @@
 package com.zhh_fu.mynowcoder.configuration;
 
+import com.zhh_fu.mynowcoder.interceptor.LoginRequiredInterceptor;
 import com.zhh_fu.mynowcoder.interceptor.PassportInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,17 @@ public class NowcoderWebConfiguration implements WebMvcConfigurer {
     @Autowired
     PassportInterceptor passportInterceptor;
 
+    @Autowired
+    LoginRequiredInterceptor loginRequiredInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        //上面为正常登陆用户的拦截器
+        //下面为未登录用户拦截器
+        //注意两者的前后关系
+        //去除掉静态页面
         registry.addInterceptor(passportInterceptor).excludePathPatterns(EXCLUDE_PATH);
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/user/*").excludePathPatterns(EXCLUDE_PATH);
 
         //super.addInterceptors(registry);
     }

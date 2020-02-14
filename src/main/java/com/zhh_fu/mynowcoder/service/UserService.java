@@ -1,6 +1,6 @@
 package com.zhh_fu.mynowcoder.service;
 
-import com.zhh_fu.mynowcoder.Util.WendaUtil;
+import com.zhh_fu.mynowcoder.Util.MynowcoderUtil;
 import com.zhh_fu.mynowcoder.dao.LoginTicketDAO;
 import com.zhh_fu.mynowcoder.dao.UserDAO;
 import com.zhh_fu.mynowcoder.model.LoginTicket;
@@ -45,7 +45,7 @@ public class UserService {
         user.setHeadUrl(String.format("http://images.nowcoder.com/head/%dt.png",new Random().nextInt(1000)));
 
         //密码使用md5加密，将password和salt结合在一起
-        user.setPassword(WendaUtil.MD5(passowrd + user.getSalt()));
+        user.setPassword(MynowcoderUtil.MD5(passowrd + user.getSalt()));
         userDAO.addUser(user);
 
         //将登陆用户和ticket结合，并将ticket返回给浏览器
@@ -75,7 +75,7 @@ public class UserService {
 
         //此处进行密码匹配
         //如果不匹配则报用户名或密码错误
-        if(!WendaUtil.MD5(password + user.getSalt()).equals(user.getPassword())){
+        if(!MynowcoderUtil.MD5(password + user.getSalt()).equals(user.getPassword())){
             map.put("msg","用户名或密码错误");
             return map;
         }
@@ -104,8 +104,16 @@ public class UserService {
         return loginTicket.getTicket();
     }
 
+    //用户登出
+    public void logout(String ticket){
+        loginTicketDAO.updateTicket(ticket,1);
+    }
     //通过id获取用户信息
     public User getUserById(int id){
+        return userDAO.selectById(id);
+    }
+
+    public User getUser(int id) {
         return userDAO.selectById(id);
     }
 }

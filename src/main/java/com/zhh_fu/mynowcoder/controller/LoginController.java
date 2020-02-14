@@ -2,10 +2,12 @@ package com.zhh_fu.mynowcoder.controller;
 
 import com.zhh_fu.mynowcoder.dao.UserDAO;
 import com.zhh_fu.mynowcoder.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +23,7 @@ public class LoginController {
     @Autowired
     UserService userService;
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IndexController.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 
     //注册
@@ -57,6 +59,7 @@ public class LoginController {
     public String login(Model model,
                         @RequestParam("username") String username,
                         @RequestParam("password") String password,
+                        @RequestParam(value = "next",required = false) String next,
                         @RequestParam(value = "rememberme", defaultValue = "false") boolean rememberme,
                         HttpServletResponse httpServletResponse){
         try {
@@ -67,6 +70,10 @@ public class LoginController {
                 Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
                 cookie.setPath("/");
                 httpServletResponse.addCookie(cookie);
+                //如果next不为空，直接跳转到next对应页面
+                if (!StringUtils.isBlank(next)){
+                    return "redirect:" + next;
+                }
                 return "redirect:/index";
             }
             //否则重新登陆
@@ -81,9 +88,18 @@ public class LoginController {
         }
     }
 
-    //注册主页面，将数据传给reg页面
+    //注册登陆主页面，将数据传给reg页面
     @RequestMapping(path = {"/reglogin"}, method = {RequestMethod.GET})
-    public String regloginPage(Model model){
+    public String regloginPage(Model model,
+                               @RequestParam(value = "next",required = false) String next){
+        model.addAttribute("next",next);
         return "login";
+    }
+
+    //退出功能
+    @RequestMapping(path = {"/logout"}, method = {RequestMethod.GET})
+    public String logout(@CookieValue("ticket") String ticket){
+        userService.logout(ticket);
+        return "redirect:/index";
     }
 }
