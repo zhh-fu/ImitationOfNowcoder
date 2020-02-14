@@ -22,6 +22,8 @@ public class MynowcoderUtil {
         return json.toJSONString();
     }
 
+    public static final int ENTITY_QUESTION = 1;
+    public static final int ENTITY_COMMENT = 2;
     public static int ANONYMOUS_USERID = 3;
 
     public static String MD5(String key) {

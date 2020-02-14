@@ -21,7 +21,7 @@ public interface UserDAO {
     User selectById(int id);
 
     @Select({"select * from ", TABLE_NAME ," where name = #{name}"})
-    User selectByName(String name);
+    User selectByName(@Param("name") String name);
 
     //改
     @Update({"update ", TABLE_NAME ," set password = #{password} where id = #{id}"})
@@ -29,5 +29,5 @@ public interface UserDAO {
 
     //删
     @Delete({"delete from ", TABLE_NAME ," where id = #{id}"})
-    void deleteById(int id);
+    void deleteById(@Param("id") int id);
 }

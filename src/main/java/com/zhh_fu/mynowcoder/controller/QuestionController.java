@@ -1,8 +1,11 @@
 package com.zhh_fu.mynowcoder.controller;
 
 import com.zhh_fu.mynowcoder.Util.MynowcoderUtil;
+import com.zhh_fu.mynowcoder.model.Comment;
 import com.zhh_fu.mynowcoder.model.HostHolder;
 import com.zhh_fu.mynowcoder.model.Question;
+import com.zhh_fu.mynowcoder.model.ViewObject;
+import com.zhh_fu.mynowcoder.service.CommentService;
 import com.zhh_fu.mynowcoder.service.QuestionService;
 import com.zhh_fu.mynowcoder.service.UserService;
 import org.apache.ibatis.annotations.Param;
@@ -13,7 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 //问题控制层
@@ -27,6 +32,9 @@ public class QuestionController {
 
     @Autowired
     HostHolder hostHolder;
+
+    @Autowired
+    CommentService commentService;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
@@ -62,8 +70,20 @@ public class QuestionController {
     public String questionDetail(Model model,
                                  @PathVariable("qid") int qid){
         Question question = questionService.getQuestionById(qid);
+        //获取所有的评论并显示
+        List<Comment> commentList = commentService.getCommentByEntity(qid, MynowcoderUtil.ENTITY_QUESTION);
+        List<ViewObject> comments = new ArrayList<ViewObject>();
+        for (Comment comment: commentList){
+            ViewObject vo = new ViewObject();
+            vo.set("comment",comment);
+            vo.set("user",userService.getUser(comment.getUserId()));
+            comments.add(vo);
+        }
         model.addAttribute("question",question);
-        model.addAttribute("user",userService.getUser(question.getUserId()));
+        model.addAttribute("user",hostHolder.getUser());
+        model.addAttribute("comments",comments);
+
+
         return "detail";
     }
 }
