@@ -6,6 +6,7 @@ import com.zhh_fu.mynowcoder.model.HostHolder;
 import com.zhh_fu.mynowcoder.model.Question;
 import com.zhh_fu.mynowcoder.model.ViewObject;
 import com.zhh_fu.mynowcoder.service.CommentService;
+import com.zhh_fu.mynowcoder.service.LikeService;
 import com.zhh_fu.mynowcoder.service.QuestionService;
 import com.zhh_fu.mynowcoder.service.UserService;
 import org.apache.ibatis.annotations.Param;
@@ -35,6 +36,9 @@ public class QuestionController {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    LikeService likeService;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
@@ -66,7 +70,8 @@ public class QuestionController {
         return MynowcoderUtil.getJSONString(1,"失败");
     }
 
-    @RequestMapping(path = {"/question/{qid}"})
+
+    @RequestMapping(path = {"/question/{qid}"},method = {RequestMethod.GET})
     public String questionDetail(Model model,
                                  @PathVariable("qid") int qid){
         Question question = questionService.getQuestionById(qid);
@@ -76,11 +81,17 @@ public class QuestionController {
         for (Comment comment: commentList){
             ViewObject vo = new ViewObject();
             vo.set("comment",comment);
+            if (hostHolder.getUser() == null){
+                vo.set("liked",0);
+            }
+            else{
+                vo.set("liked",likeService.getLikeStatus(hostHolder.getUser().getId(),comment.getId(),MynowcoderUtil.ENTITY_COMMENT));
+            }
+            vo.set("likeCount",likeService.getLikeCount(comment.getId(),MynowcoderUtil.ENTITY_COMMENT));
             vo.set("user",userService.getUser(comment.getUserId()));
             comments.add(vo);
         }
         model.addAttribute("question",question);
-        model.addAttribute("user",hostHolder.getUser());
         model.addAttribute("comments",comments);
 
 

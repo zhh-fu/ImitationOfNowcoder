@@ -1,7 +1,5 @@
 <#include "header1.html">
-<link rel="search" type="application/opensearchdescription+xml" href="" title="牛客">
 <link rel="stylesheet" href="../styles/detail.css">
-<script src="../scripts/instant.e7a17de6.js"></script>
 
     <div class="zg-wrap zu-main clearfix with-indention-votebar" itemscope="" itemtype="http://schema.org/Question" id="zh-single-question-page" data-urltoken="36301524" role="main">
         <div class="zu-main-content">
@@ -78,19 +76,31 @@
                 </div>
                 <div id="zh-question-answer-wrap" data-pagesize="10" class="zh-question-answer-wrapper navigable" data-widget="navigable" data-navigable-options="{&quot;items&quot;: &quot;&gt;.zm-item-answer&quot;}" data-init="{&quot;params&quot;: {&quot;url_token&quot;: 36301524, &quot;pagesize&quot;: 10, &quot;offset&quot;: 0}, &quot;nodename&quot;: &quot;QuestionAnswerListV2&quot;}">
                     <#list comments as comment>
-                        <div tabindex="-1" class="zm-item-answer  zm-item-expanded" itemprop="topAnswer" itemscope="" itemtype="http://schema.org/Answer" data-aid="22162611" data-atoken="66862039" data-collapsed="0" data-created="1444310527" data-deleted="0" data-helpful="1" data-isowner="0" data-copyable="1" data-za-module="AnswerItem">
+                        <div  class="zm-item-answer  zm-item-expanded js-comment" >
                         <link itemprop="url" href="">
                         <meta itemprop="answer-id" content="22162611">
                         <meta itemprop="answer-url-token" content="66862039">
                         <a class="zg-anchor-hidden" name="answer-22162611"></a>
-                        <div class="zm-votebar goog-scrollfloater" data-za-module="VoteBar">
-                            <button class="up" aria-pressed="false" title="赞同">
+
+                        <div class="zm-votebar goog-scrollfloater js-vote" data-id="${comment.comment.id}">
+                            <#if (comment.liked > 0) >
+                                <button class="up js-like pressed"  title="赞同">
+                            <#else>
+                                <button class="up js-like"  title="赞同">
+                            </#if>
                                 <i class="icon vote-arrow"></i>
-                                <span class="count">28</span>
-                                <span class="label sr-only">赞同</span></button>
-                            <button class="down" aria-pressed="false" title="反对，不会显示你的姓名">
+                                <span class="count js-voteCount">${comment.likeCount}</span>
+                                <span class="label sr-only">赞同</span>
+                            </button>
+
+                            <#if (comment.liked < 0) >
+                                <button class="down js-dislike pressed" title="反对，不会显示你的姓名">
+                            <#else>
+                                <button class="down js-dislike" title="反对，不会显示你的姓名">
+                            </#if>
                                 <i class="icon vote-arrow"></i>
-                                <span class="label sr-only">反对，不会显示你的姓名</span></button>
+                                <span class="label sr-only">反对，不会显示你的姓名</span>
+                            </button>
                         </div>
                         <div class="answer-head">
                             <div class="zm-item-answer-author-info">
@@ -98,10 +108,10 @@
                                     <img src="${comment.user.headUrl}" class="zm-list-avatar avatar"></a>
                                 <a class="author-link" data-tip="p$t$yingxiaodao" target="_blank" href="/user/${comment.user.id}">${comment.user.name}</a>
                                 <span title="爱科学 爱运动" class="bio">，爱生活，爱代码</span></div>
-                            <div class="zm-item-vote-info" data-votecount="28" data-za-module="VoteInfo">
+                            <div class="zm-item-vote-info">
                                 <span class="voters text">
                                     <a href="" class="more text">
-                                        <span class="js-voteCount">28</span>&nbsp;人赞同</a></span>
+                                        <span class="js-voteCount">${comment.likeCount}</span>&nbsp;人赞同</a></span>
                             </div>
                         </div>
                         <div class="zm-item-rich-text expandable js-collapse-body" data-resourceid="6727688" data-action="/answer/content" data-author-name="营销岛" data-entry-url="/question/36301524/answer/66862039">
@@ -134,16 +144,6 @@
                 <a name="draft"></a>
                 <form action="/addComment" method="post" id="commentform">
                     <input type="hidden" name="questionId" value="${question.id}"/>
-                    <div class="zh-answer-form clearfix">
-                        <div>
-                            <div class="zu-answer-form-title">
-                                <a href="/user/${user.id}" title="${user.name}" class="zm-item-link-avatar" data-tip="p$t$hu-yuan-24-48">
-                                    <img src="${user.headUrl}" class="zm-list-avatar"></a>
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                <a href="/user/${user.id}" title="${user.name}" data-tip="p$t$hu-yuan-24-48">${user.name}</a>
-                            </div>
-                        </div>
-                    </div>
                     <div class="zm-editable-editor-wrap" style="">
                         <div class="zm-editable-editor-outer">
                             <div class="zm-editable-editor-field-wrap">
