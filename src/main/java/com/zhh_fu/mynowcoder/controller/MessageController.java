@@ -44,7 +44,7 @@ public class MessageController {
             ViewObject vo = new ViewObject();
             vo.set("conversation",message);
             int target = message.getFromId() == localUserId ? message.getToId() : message.getFromId();
-            vo.set("user",userService.getUserById(target));
+            vo.set("user",userService.getUser(target));
             vo.set("unread",messageService.getConversationUnreadCount(localUserId, message.getConversationId()));
             conversations.add(vo);
         }
@@ -60,7 +60,7 @@ public class MessageController {
             for (Message message : messageList){
                 ViewObject vo = new ViewObject();
                 vo.set("message",message);
-                vo.set("user",userService.getUserById(message.getFromId()));
+                vo.set("user",userService.getUser(message.getFromId()));
                 messages.add(vo);
             }
             model.addAttribute("messages", messages);

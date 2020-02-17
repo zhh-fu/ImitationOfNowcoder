@@ -46,7 +46,7 @@ public class IndexController {
             //前端通过vo.questionkey来获取question对象
             //也就是通过key来获取
             vo.set("questionkey", question);
-            vo.set("user", userService.getUserById(question.getUserId()));
+            vo.set("user", userService.getUser(question.getUserId()));
             vos.add(vo);
         }
         return vos;

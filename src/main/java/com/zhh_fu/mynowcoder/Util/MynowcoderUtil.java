@@ -9,6 +9,11 @@ import java.security.MessageDigest;
 public class MynowcoderUtil {
     private static final Logger logger = LoggerFactory.getLogger(MynowcoderUtil.class);
 
+    public static final int ENTITY_QUESTION = 1;
+    public static final int ENTITY_COMMENT = 2;
+    public static int ANONYMOUS_USERID = 3;
+    public static int SYSTEM_USERID = 4;
+
     public static String getJSONString(int code){
         JSONObject json = new JSONObject();
         json.put("code", code);
@@ -21,10 +26,6 @@ public class MynowcoderUtil {
         json.put("msg", msg);
         return json.toJSONString();
     }
-
-    public static final int ENTITY_QUESTION = 1;
-    public static final int ENTITY_COMMENT = 2;
-    public static int ANONYMOUS_USERID = 3;
 
     public static String MD5(String key) {
         char hexDigits[] = {

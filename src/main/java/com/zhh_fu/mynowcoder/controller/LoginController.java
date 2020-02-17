@@ -1,5 +1,8 @@
 package com.zhh_fu.mynowcoder.controller;
 
+import com.zhh_fu.mynowcoder.async.EventModel;
+import com.zhh_fu.mynowcoder.async.EventProducer;
+import com.zhh_fu.mynowcoder.async.EventType;
 import com.zhh_fu.mynowcoder.dao.UserDAO;
 import com.zhh_fu.mynowcoder.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +25,9 @@ public class LoginController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -63,13 +69,20 @@ public class LoginController {
                         @RequestParam(value = "rememberme", defaultValue = "false") boolean rememberme,
                         HttpServletResponse httpServletResponse){
         try {
-            Map<String, String> map = userService.login(username, password);
+            Map<String, Object> map = userService.login(username, password);
             //如果包含ticket证明用户名验证成功
             //同时将cookie上传给浏览器，跳转到首页
             if (map.containsKey("ticket")){
                 Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
                 cookie.setPath("/");
+                if (rememberme) {
+                    cookie.setMaxAge(3600*24*5);
+                }
                 httpServletResponse.addCookie(cookie);
+
+                //eventProducer.fireEvent(new EventModel(EventType.LOGIN).setActorId((int) map.get("userId")).setExt("username",username).setExt("email","137588897@qq.com"));
+
+
                 //如果next不为空，直接跳转到next对应页面
                 if (!StringUtils.isBlank(next)){
                     return "redirect:" + next;
