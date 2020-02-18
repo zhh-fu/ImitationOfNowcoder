@@ -1,10 +1,13 @@
 package com.zhh_fu.mynowcoder;
 
 
+import com.zhh_fu.mynowcoder.Util.JedisAdapter;
+import com.zhh_fu.mynowcoder.Util.MynowcoderUtil;
 import com.zhh_fu.mynowcoder.dao.QuestionDAO;
 import com.zhh_fu.mynowcoder.dao.UserDAO;
 import com.zhh_fu.mynowcoder.model.Question;
 import com.zhh_fu.mynowcoder.model.User;
+import com.zhh_fu.mynowcoder.service.FollowService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,13 +17,19 @@ import java.util.Date;
 import java.util.Random;
 
 @SpringBootTest
-@Sql("/init-schema.sql")
+//@Sql("/init-schema.sql")
 public class InitDatabaseTest {
     @Autowired
     UserDAO userDAO;
 
     @Autowired
     QuestionDAO questionDAO;
+
+    @Autowired
+    FollowService followService;
+
+    @Autowired
+    JedisAdapter jedisAdapter;
 
     @Test
     public void initDatabase(){
@@ -32,10 +41,12 @@ public class InitDatabaseTest {
             user.setPassword("");
             user.setSalt("");
             userDAO.addUser(user);
-            if (i == 10){
-                user.setPassword("fuzhihang");
-                userDAO.updatePassword(user);
+
+            for (int j = 1;j < i;j++){
+                followService.follow(j, i, MynowcoderUtil.ENTITY_USER);
             }
+
+            /*
             Question question = new Question();
             question.setCommentCount(i);
             Date date = new Date();
@@ -45,8 +56,9 @@ public class InitDatabaseTest {
             question.setTitle(String.format("TITLE{%d}", i));
             question.setContent(String.format("Balaababalalalal Content %d", i));
             questionDAO.addQuestion(question);
+            */
         }
-        userDAO.deleteById(2);
+        //userDAO.deleteById(2);
 
         System.out.println(questionDAO.selectLatestQuestions(0,0,9));
         System.out.println(questionDAO.selectQuestionById(4));

@@ -1,14 +1,8 @@
 package com.zhh_fu.mynowcoder.controller;
 
 import com.zhh_fu.mynowcoder.Util.MynowcoderUtil;
-import com.zhh_fu.mynowcoder.model.Comment;
-import com.zhh_fu.mynowcoder.model.HostHolder;
-import com.zhh_fu.mynowcoder.model.Question;
-import com.zhh_fu.mynowcoder.model.ViewObject;
-import com.zhh_fu.mynowcoder.service.CommentService;
-import com.zhh_fu.mynowcoder.service.LikeService;
-import com.zhh_fu.mynowcoder.service.QuestionService;
-import com.zhh_fu.mynowcoder.service.UserService;
+import com.zhh_fu.mynowcoder.model.*;
+import com.zhh_fu.mynowcoder.service.*;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +33,9 @@ public class QuestionController {
 
     @Autowired
     LikeService likeService;
+
+    @Autowired
+    FollowService followService;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
@@ -93,6 +90,28 @@ public class QuestionController {
         }
         model.addAttribute("question",question);
         model.addAttribute("comments",comments);
+
+        List<ViewObject> followUsers = new ArrayList<ViewObject>();
+        // 获取关注的用户信息
+        List<Integer> users = followService.getFollowers(qid, MynowcoderUtil.ENTITY_QUESTION,  20);
+        for (Integer userId : users) {
+            ViewObject vo = new ViewObject();
+            User u = userService.getUser(userId);
+            if (u == null) {
+                continue;
+            }
+            vo.set("name", u.getName());
+            vo.set("headUrl", u.getHeadUrl());
+            vo.set("id", u.getId());
+            followUsers.add(vo);
+        }
+        model.addAttribute("followUsers", followUsers);
+        if (hostHolder.getUser() != null) {
+            model.addAttribute("followed", followService.isFollower(hostHolder.getUser().getId(), qid, MynowcoderUtil.ENTITY_QUESTION));
+        } else {
+            model.addAttribute("followed", false);
+        }
+        model.addAttribute("followUsersCount",users.size());
 
 
         return "detail";

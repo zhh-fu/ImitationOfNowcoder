@@ -15,7 +15,7 @@
                         <#list vos as vo>
                         <div class="feed-item folding feed-item-hook feed-item-5
                         " feed-item-a="" data-type="a" id="feed-5" data-za-module="FeedItem" data-za-index="">
-                            <meta itemprop="ZReactor" data-id="2721435" data-meta="{&quot;source_type&quot;: &quot;promotion_answer&quot;, &quot;voteups&quot;: 2517, &quot;comments&quot;: 471, &quot;source&quot;: []}">
+                            <meta itemprop="ZReactor" data-id="2721435" data-meta="{&quot;source_type&quot;: &quot;promotion_answer&quot;, &quot;voteups&quot;: ${vo.followCount}, &quot;comments&quot;: 471, &quot;source&quot;: []}">
                             <div class="feed-item-inner">
                                 <div class="avatar">
                                     <a title="${vo.user.name}" data-tip="p$t$jtlvcn" class="zm-item-link-avatar" target="_blank" href="https://nowcoder.com/people/jtlvcn">
@@ -26,7 +26,7 @@
                                         <meta itemprop="answer-id" content="2721435">
                                         <meta itemprop="answer-url-token" content="18864677">
                                         <h2 class="feed-title">
-                                            <a class="question_link" target="_blank" href="/question/${vo.questionkey.id}">${vo.questionkey.title}</a></h2>
+                                            <a class="question_link" target="_blank" href="/question/${vo.question.id}">${vo.question.title}</a></h2>
                                         <div class="feed-question-detail-item">
                                             <div class="question-description-plain zm-editable-content"></div>
                                         </div>
@@ -35,11 +35,11 @@
                                             <meta itemprop="answer-id" content="2721435">
                                             <meta itemprop="answer-url-token" content="18864677"> -->
                                             <div class="zm-item-vote">
-                                                <a class="zm-item-vote-count js-expand js-vote-count" href="javascript:;" data-bind-votecount="">2517</a></div>
+                                                <a class="zm-item-vote-count js-expand js-vote-count" href="javascript:;" data-bind-votecount="">${vo.followCount}</a></div>
                                             <div class="zm-votebar" data-za-module="VoteBar">
                                                 <button class="up" aria-pressed="false" title="赞同">
                                                     <i class="icon vote-arrow"></i>
-                                                    <span class="count">2517</span>
+                                                    <span class="count">${vo.followCount}</span>
                                                     <span class="label sr-only">赞同</span></button>
                                                 <button class="down" aria-pressed="false" title="反对，不会显示你的姓名">
                                                     <i class="icon vote-arrow"></i>
@@ -47,15 +47,15 @@
                                             </div>
                                             <div class="zm-item-answer-author-info">
                                                 <a class="author-link" data-tip="p$t$jtlvcn" target="_blank" href="/user/${vo.user.id}">${vo.user.name}</a>
-                                                <span title="半血复活ing..." class="bio">，${vo.questionkey.createdDate?datetime}</span></div>
-                                            <div class="zm-item-vote-info" data-votecount="2517" data-za-module="VoteInfo">
+                                                <span title="半血复活ing..." class="bio">，${vo.question.createdDate?datetime}</span></div>
+                                            <div class="zm-item-vote-info" data-votecount="${vo.followCount}" data-za-module="VoteInfo">
                                                 <span class="voters text">
                                                     <a href="#" class="more text">
-                                                        <span class="js-voteCount">2517</span>&nbsp;人赞同</a></span>
+                                                        <span class="js-voteCount">${vo.followCount}</span>&nbsp;人赞同</a></span>
                                             </div>
                                             <div class="zm-item-rich-text expandable js-collapse-body" data-resourceid="838079" data-action="/answer/content" data-author-name="吕剑霆" data-entry-url="/question/21643389/answer/18864677">
-                                                <textarea hidden="" class="content">${vo.questionkey.content}</textarea>
-                                                <div class="zh-summary summary clearfix">${vo.questionkey.content}
+                                                <textarea hidden="" class="content">${vo.question.content}</textarea>
+                                                <div class="zh-summary summary clearfix">${vo.question.content}
                                                     <a href="https://nowcoder.com/question/21643389/answer/18864677" class="toggle-expand">显示全部</a></div>
                                                 <p class="visible-expanded">
                                                     <a itemprop="url" class="answer-date-link meta-item" data-tip="s$t$发布于 2013-09-13" target="_blank" href="https://nowcoder.com/question/21643389/answer/18864677">编辑于 2013-09-18</a></p>
@@ -67,7 +67,7 @@
                                                     <a data-follow="q:link" class="follow-link zg-follow meta-item" href="javascript:;" id="sfb-123114">
                                                         <i class="z-icon-follow"></i>关注问题</a>
                                                     <a href="#" name="addcomment" class="meta-item toggle-comment js-toggleCommentBox">
-                                                        <i class="z-icon-comment"></i>${vo.questionkey.commentCount} 条评论</a>
+                                                        <i class="z-icon-comment"></i>${vo.question.commentCount} 条评论</a>
                                                     <!--<a href="#" class="meta-item js-thank" data-thanked="false">-->
                                                         <!--<i class="z-icon-thank"></i>感谢</a>-->
 
@@ -179,4 +179,7 @@
             <div class="tooltip-arrow arrow"></div>
             <div class="tooltip-inner inner">如需转载，请通过私信或评论联系我</div></div>
     </div>
+<#include "js.html">
+<script type="text/javascript" src="/scripts/main/site/detail.js"></script>
+<script type="text/javascript" src="/scripts/main/site/follow.js"></script>
 <#include "footer1.html">

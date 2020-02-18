@@ -31,6 +31,9 @@ public interface CommentDAO {
     @Select({"select * from ", TABLE_NAME, "  where id=#{id} "})
     Comment getCommentById(@Param("id") int id);
 
+    @Select({"select count(id) from ", TABLE_NAME, " where user_id=#{userId}"})
+    int getUserCommentCount(@Param("userId") int userId);
+
     //通过实体得到数量
     @Select({"select count(id) from ", TABLE_NAME, " where entity_id=#{entityId} and entity_type=#{entityType} "})
     int getCommentCount(@Param("entityId") int entityId, @Param("entityType") int entityType);
