@@ -1,6 +1,9 @@
 package com.zhh_fu.mynowcoder.controller;
 
 import com.zhh_fu.mynowcoder.Util.MynowcoderUtil;
+import com.zhh_fu.mynowcoder.async.EventModel;
+import com.zhh_fu.mynowcoder.async.EventProducer;
+import com.zhh_fu.mynowcoder.async.EventType;
 import com.zhh_fu.mynowcoder.model.Comment;
 import com.zhh_fu.mynowcoder.model.HostHolder;
 import com.zhh_fu.mynowcoder.service.CommentService;
@@ -24,6 +27,9 @@ public class CommentController {
 
     @Autowired
     QuestionService questionService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
@@ -51,6 +57,12 @@ public class CommentController {
 
             int count = commentService.getCommentCount(comment.getEntityId(),comment.getEntityType());
             questionService.updateCommentCount(comment.getEntityId(),count);
+
+            //由FeedHandler来处理
+            eventProducer.fireEvent(new EventModel(EventType.COMMENT)
+                    .setActorId(comment.getUserId())
+                    .setEntityId(questionId));
+
         }
         catch (Exception ex){
             logger.error("增加评论失败" + ex.getMessage());

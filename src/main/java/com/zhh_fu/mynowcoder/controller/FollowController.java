@@ -41,9 +41,9 @@ public class FollowController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(FollowController.class);
 
     //关注用户
-    @RequestMapping(path = {"/followUser"},method = {RequestMethod.POST})
+    @RequestMapping(path = {"/followUser"},method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
-    public String addFollower(@RequestParam("userId") int userId){
+    public String followUser(@RequestParam("userId") int userId){
         User user = hostHolder.getUser();
         if (user == null){
             return MynowcoderUtil.getJSONString(999);
@@ -61,7 +61,7 @@ public class FollowController {
     //取消关注用户
     @RequestMapping(path = {"/unfollowUser"},method = {RequestMethod.POST})
     @ResponseBody
-    public String unfollow(@RequestParam("userId") int userId){
+    public String unfollowUser(@RequestParam("userId") int userId){
         User user = hostHolder.getUser();
         if (user == null){
             return MynowcoderUtil.getJSONString(999);
@@ -109,7 +109,7 @@ public class FollowController {
     //取消关注问题
     @RequestMapping(path = {"/unfollowQuestion"},method = {RequestMethod.POST})
     @ResponseBody
-    public String unfollowQuestion(@RequestParam("questionId") int questionId){
+    public String unFollowQuestion(@RequestParam("questionId") int questionId){
         User user = hostHolder.getUser();
         if (user == null){
             return MynowcoderUtil.getJSONString(999);

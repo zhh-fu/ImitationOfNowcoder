@@ -16,13 +16,15 @@
                             <div class="zm-profile-card zm-profile-section-item zg-clear no-hovercard">
                                 <#if vo.followed>
                                 <div class="zg-right">
-                                    <button class="zg-btn zg-btn-unfollow zm-rich-follow-btn small nth-0 js-follow-user" data-status="1" data-id="$vo.user.id">取消关注</button>
+                                    <button class="zg-btn zg-btn-unfollow zm-rich-follow-btn small nth-0
+                                    js-follow-user" data-status="1" data-id="${vo.user.id}">取消关注</button>
                                 </div>
                                 <#else>
                                 <div class="zg-right">
-                                    <button class="zg-btn zg-btn-follow zm-rich-follow-btn small nth-0 js-follow-user" data-id="$vo.user.id">关注</button>
+                                    <button class="zg-btn zg-btn-follow zm-rich-follow-btn small nth-0
+                                    js-follow-user" data-id="${vo.user.id}">关注</button>
                                 </div>
-                            </#if>
+                                </#if>
                                 <a title="Barty" class="zm-item-link-avatar" href="/user/${vo.user.id}">
                                     <img src="${vo.user.headUrl}" class="zm-item-img-avatar">
                                 </a>
@@ -51,5 +53,4 @@
     </div>
 <#include "js.html">
 <script type="text/javascript" src="/scripts/main/site/follow.js"></script>
-<script type="text/javascript" src="/scripts/main/site/profile.js"></script>
 <#include "footer1.html">

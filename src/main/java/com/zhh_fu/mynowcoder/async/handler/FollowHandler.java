@@ -9,11 +9,13 @@ import com.zhh_fu.mynowcoder.model.User;
 import com.zhh_fu.mynowcoder.service.MessageService;
 import com.zhh_fu.mynowcoder.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+@Component
 public class FollowHandler implements EventHandler {
     @Autowired
     MessageService messageService;
