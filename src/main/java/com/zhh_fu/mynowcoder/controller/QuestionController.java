@@ -1,6 +1,9 @@
 package com.zhh_fu.mynowcoder.controller;
 
 import com.zhh_fu.mynowcoder.Util.MynowcoderUtil;
+import com.zhh_fu.mynowcoder.async.EventModel;
+import com.zhh_fu.mynowcoder.async.EventProducer;
+import com.zhh_fu.mynowcoder.async.EventType;
 import com.zhh_fu.mynowcoder.model.*;
 import com.zhh_fu.mynowcoder.service.*;
 import org.apache.ibatis.annotations.Param;
@@ -37,6 +40,9 @@ public class QuestionController {
     @Autowired
     FollowService followService;
 
+    @Autowired
+    EventProducer eventProducer;
+
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     @RequestMapping(value = {"/question/add"} ,method = {RequestMethod.POST})
@@ -58,6 +64,10 @@ public class QuestionController {
 
             //成功全部返回0
             if (questionService.addQuestion(question) > 0){
+                eventProducer.fireEvent(new EventModel(EventType.ADD_QUESTION)
+                .setActorId(question.getUserId()).setEntityId(question.getId())
+                .setExt("title",question.getTitle()).setExt("content",question.getContent()));
+
                 return MynowcoderUtil.getJSONString(0);
             }
         }
