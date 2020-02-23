@@ -38,7 +38,6 @@ public class SearchController {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
-    //为问题增加评论
     @RequestMapping(path = {"/search"},method = {RequestMethod.GET})
     public String search(Model model,
                          @RequestParam("q") String keyword,
